@@ -7,7 +7,7 @@ describe("SyslogProtocol", function() {
       demand(parse("<15>")).be.null()
     })
 
-    describe("given RFC 3164 with ISO 8601 timestamp", function() {
+    describe("given RFC 3164 inc. ISO 8601 timestamp", function() {
       ;[
         "kern",
         "user",
@@ -68,14 +68,27 @@ describe("SyslogProtocol", function() {
         })
       })
 
+      it("must parse timestamp in RFC 3164", function() {
+        var msg = "<15>Jun 18 15:20:30 server user: Test 123";
+        var now = new Date();
+        var syslog = parse(msg);
+        syslog.time.must.eql(new Date(now.getFullYear(), 5, 18, 15, 20, 30, 0));
+      })
 
-      it("must parse timestamp given UTC offset", function() {
+      it("must parse timestamp in RFC 3164 with single digit date", function() {
+        var msg = "<15>Jun  8 15:20:30 server user: Test 123";
+        var now = new Date();
+        var syslog = parse(msg);
+        syslog.time.must.eql(new Date(now.getFullYear(), 5, 8, 15, 20, 30, 0));
+      })
+
+      it("must parse timestamp in ISO 8601 given UTC offset", function() {
         var msg = "<15>1987-06-18T15:20:30.337Z server user: Test 123"
         var syslog = parse(msg)
         syslog.time.must.eql(new Date(Date.UTC(1987, 5, 18, 15, 20, 30, 337)))
       })
 
-      it("must parse timestamp given time offset", function() {
+      it("must parse timestamp in ISO 8601 given time offset", function() {
         var msg = "<15>1987-06-18T18:20:30.337+03:00 server user: Test 123"
         var syslog = parse(msg)
         syslog.time.must.eql(new Date(Date.UTC(1987, 5, 18, 15, 20, 30, 337)))

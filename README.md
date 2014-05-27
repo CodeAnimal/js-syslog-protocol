@@ -8,6 +8,26 @@ SyslogProtocol.js
 SyslogProtocol.js is a Syslog ([RFC 3164][rfc3164]) format parser that supports
 high-precision timestamps ([RFC 3339][rfc3339], [ISO 8601][iso8601]).
 
+
+Given a Syslog message with RFC 3164 timestamp:
+```
+<38>Jun 18 15:20:30 server sshd[42]: Accepted publickey for user
+```
+
+It'll return the following object (with `time` being an instance of `Date`, and the year being 'this year'):
+```javascript
+{ facility: "auth",
+  facilityCode: 4,
+  severity: "info",
+  severityCode: 6,
+  time: new Date("2014-06-18T15:20:30.0Z"),
+  host: "server",
+  process: "sshd",
+  pid: 42,
+  message: "Accepted publickey for user" }
+```
+
+
 Given a Syslog message with a high-precision timestamp:
 ```
 <38>1987-06-18T15:20:30.337Z server sshd[42]: Accepted publickey for user
@@ -26,14 +46,14 @@ It'll return the following object (with `time` being an instance of `Date`):
   message: "Accepted publickey for user" }
 ```
 
+
 [rfc3164]: https://tools.ietf.org/html/rfc3164
 [rfc3339]: https://tools.ietf.org/html/rfc3339
 [iso8601]: https://en.wikipedia.org/wiki/ISO_8601
 
-Ironically, SyslogProtocol.js does *not* support plain [RFC 3164's
+SyslogProtocol.js does now support plain [RFC 3164's
 timestamps](https://tools.ietf.org/html/rfc3164#section-4.1.2), which are in
-who-knows-what time zone and lack a year part. If you can, don't use them. If
-you're really keen on them, please let me know and I'll see about implementing.
+who-knows-what time zone and lack a year part. If you can, don't use them.
 
 ### Tour
 - Supports [RFC 3164](rfc3164) with high-precision timestamps ([RFC
