@@ -69,17 +69,17 @@ describe("SyslogProtocol", function() {
       })
 
       it("must parse timestamp in RFC 3164", function() {
-        var msg = "<15>Jun 18 15:20:30 server user: Test 123";
-        var now = new Date();
-        var syslog = parse(msg);
-        syslog.time.must.eql(new Date(now.getFullYear(), 5, 18, 15, 20, 30, 0));
+        var msg = "<15>Jun 18 15:20:30 server user: Test 123"
+        var now = new Date()
+        var syslog = parse(msg)
+        syslog.time.must.eql(new Date(now.getFullYear(), 5, 18, 15, 20, 30, 0))
       })
 
       it("must parse timestamp in RFC 3164 with single digit date", function() {
-        var msg = "<15>Jun  8 15:20:30 server user: Test 123";
-        var now = new Date();
-        var syslog = parse(msg);
-        syslog.time.must.eql(new Date(now.getFullYear(), 5, 8, 15, 20, 30, 0));
+        var msg = "<15>Jun  8 15:20:30 server user: Test 123"
+        var now = new Date()
+        var syslog = parse(msg)
+        syslog.time.must.eql(new Date(now.getFullYear(), 5, 8, 15, 20, 30, 0))
       })
 
       it("must parse timestamp in ISO 8601 given UTC offset", function() {

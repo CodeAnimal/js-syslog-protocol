@@ -1,6 +1,6 @@
 exports.parse = function (line) {
-  var matches = RFC3164_WITH_ISO8601_TIME.exec(line);
-  if (!matches) return null;
+  var matches = RFC3164_WITH_ISO8601_TIME.exec(line)
+  if (!matches) return null
 
   var priority = Number(matches[1]),
       facility = priority >> 3,
@@ -33,18 +33,18 @@ exports.parse = function (line) {
         // http://tools.ietf.org/html/rfc5424#appendix-A.1
         // For consistency, stick to "message".
         message: matches[6]
-      };
+      }
 
   // Both RFC 3164 and <syslog.h> talk about the value in brackets as PID.
   // http://tools.ietf.org/html/rfc3164#section-5.3
   //
   // It doesn't necessarily have to be a number.
   // As a random example, Heroku's TAG is heroku[router].
-  var pid = matches[5];
-  if (pid != null) struct.pid = pid && NUMBER.test(pid) ? Number(pid) : pid;
+  var pid = matches[5]
+  if (pid != null) struct.pid = pid && NUMBER.test(pid) ? Number(pid) : pid
 
-  return struct;
-};
+  return struct
+}
 
 var RFC3164_Time_WithoutGroups = "(?:[A-Z][a-z]{2} [ 1-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9])",
     RFC3164_Time_WithGroups = "(?:([A-Z][a-z]{2}) ([ 1-3][0-9]) ([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))",
@@ -56,7 +56,7 @@ var RFC3164_Time_WithoutGroups = "(?:[A-Z][a-z]{2} [ 1-3][0-9] [0-2][0-9]:[0-5][
       + " (?:(\\S+?)(?:\\[([^\\]]*)\\])?)" // Tag/Process + PID
       + "(?: |: ?)([\\s\\S]*)"             // Message
     ),
-    RFC3164_TIME = new RegExp("^" + RFC3164_Time_WithGroups + "$");
+    RFC3164_TIME = new RegExp("^" + RFC3164_Time_WithGroups + "$")
 
 // Facility names are set to match common <syslog.h> naming.
 var FACILITY = exports.FACILITY = [
@@ -84,7 +84,7 @@ var FACILITY = exports.FACILITY = [
   "local5",
   "local6",
   "local7"
-];
+]
 
 // Severity names are set to match common <syslog.h> naming.
 var SEVERITY = exports.SEVERITY = [
@@ -96,13 +96,13 @@ var SEVERITY = exports.SEVERITY = [
   "notice",
   "info",
   "debug"
-];
+]
 
-var NUMBER = /^\d+$/;
+var NUMBER = /^\d+$/
 
 function parseTime (time){
-  var matches = RFC3164_TIME.exec(time);
-  if (!matches) return new Date(time);
+  var matches = RFC3164_TIME.exec(time)
+  if (!matches) return new Date(time)
 
   var now = new Date(),
       months = {
@@ -118,7 +118,7 @@ function parseTime (time){
         "Oct" : 9,
         "Nov" : 10,
         "Dec" : 11
-      };
+      }
 
-  return new Date(now.getFullYear(), months[matches[1]], matches[2].trim(), matches[3], matches[4], matches[5], 0);
+  return new Date(now.getFullYear(), months[matches[1]], matches[2].trim(), matches[3], matches[4], matches[5], 0)
 }
